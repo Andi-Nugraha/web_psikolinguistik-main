@@ -59,27 +59,27 @@
 </div>
 </div>
 <nav class="flex flex-col gap-2">
-<a class="group flex items-center gap-3 rounded-lg bg-[#283339] px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navHome" class="group flex items-center gap-3 rounded-lg bg-[#283339] px-3 py-2.5 transition-all hover:bg-[#283339]" href="dashboard_code.html">
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">home</span>
 <p class="text-sm font-medium text-white">Home</p>
 </a>
-<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navVideoLearning" class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="learningVideo_code.html">
 <span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">play_circle</span>
 <p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Video Learning</p>
 </a>
-<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navFlashcards" class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="flashcards_code.html">
 <span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">style</span>
 <p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Flashcards</p>
 </a>
-<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navExercises" class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="exercises_code.html">
 <span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">fitness_center</span>
 <p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Exercises</p>
 </a>
-<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navProgress" class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="progress_code.html">
 <span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">pie_chart</span>
 <p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Progress</p>
 </a>
-<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<a id="navSettings" class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="settings_code.html">
 <span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">settings</span>
 <p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Settings</p>
 </a>
@@ -89,7 +89,7 @@
 <button class="flex w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-primary to-blue-500 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95">
                     Upgrade to Pro
                 </button>
-<div id="userProfileBtn" class="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[#283339] cursor-pointer transition-colors">
+<div id="userProfileBtn" class="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[#283339] cursor-pointer transition-colors" onclick="window.location.href='profile_code.html'" style="cursor: pointer;">
 <div class="h-8 w-8 overflow-hidden rounded-full border border-[#3b4b54] bg-cover bg-center" data-alt="User profile picture showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAWTQwRap2VcbEssRxN1a_yBRaesMAN6NSYImuSp_DPXaL3yyiSXYvwaEiobqo7oQb2vuSW10SmYr_AqT7c5oLZeHqdoOO1EeFVcHRT2QhG4EJZnoMxgI6p1PAV9GjEMzi57CgdQuHE8e74-w-4F9rEzCAE7GYBaNr2q2Bb-c74btQJNZUvxzLkfdqX8pdWkecEbgznDo4OtUlsWQoLYMHAQ8hQJUriQPZy1S79GJSGVlGGeIU-mA6yrevCLYUuPoD8rT9nM1eJN2Ux");'></div>
 <div class="flex flex-1 flex-col overflow-hidden">
 <p class="truncate text-sm font-medium text-white" id="userName">Alex Morgan</p>
@@ -111,7 +111,7 @@
 <p class="text-base font-normal">You're on a <span class="font-bold text-white">5-day streak</span>. Keep the momentum going!</p>
 </div>
 </div>
-<button class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:bg-blue-400 hover:shadow-blue-500/40 active:scale-95">
+<button id="startLearningBtn" class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:bg-blue-400 hover:shadow-blue-500/40 active:scale-95">
 <span class="material-symbols-outlined" style="font-size: 20px;">play_arrow</span>
 <span>Start Learning</span>
 </button>
