@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LinguaFlow Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;family=Noto+Sans:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                        "surface-dark": "#16242c",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101c22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #283339; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b4b54; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden">
+<div class="flex h-screen w-full overflow-hidden">
+<aside class="hidden w-64 flex-col justify-between border-r border-[#283339] bg-background-dark p-4 md:flex overflow-y-auto">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-blue-600 shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined text-white" style="font-size: 24px;">translate</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-lg font-bold leading-none tracking-tight text-white">LinguaFlow</h1>
+<p class="text-xs font-medium text-[#9db0b9]">v2.4</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="group flex items-center gap-3 rounded-lg bg-[#283339] px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">home</span>
+<p class="text-sm font-medium text-white">Home</p>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">play_circle</span>
+<p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Video Learning</p>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">style</span>
+<p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Flashcards</p>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">fitness_center</span>
+<p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Exercises</p>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">pie_chart</span>
+<p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Progress</p>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-[#283339]" href="#">
+<span class="material-symbols-outlined text-[#9db0b9] group-hover:text-white">settings</span>
+<p class="text-sm font-medium text-[#9db0b9] group-hover:text-white">Settings</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4 border-t border-[#283339] pt-4">
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-primary to-blue-500 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95">
+                    Upgrade to Pro
+                </button>
+<div id="userProfileBtn" class="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[#283339] cursor-pointer transition-colors">
+<div class="h-8 w-8 overflow-hidden rounded-full border border-[#3b4b54] bg-cover bg-center" data-alt="User profile picture showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAWTQwRap2VcbEssRxN1a_yBRaesMAN6NSYImuSp_DPXaL3yyiSXYvwaEiobqo7oQb2vuSW10SmYr_AqT7c5oLZeHqdoOO1EeFVcHRT2QhG4EJZnoMxgI6p1PAV9GjEMzi57CgdQuHE8e74-w-4F9rEzCAE7GYBaNr2q2Bb-c74btQJNZUvxzLkfdqX8pdWkecEbgznDo4OtUlsWQoLYMHAQ8hQJUriQPZy1S79GJSGVlGGeIU-mA6yrevCLYUuPoD8rT9nM1eJN2Ux");'></div>
+<div class="flex flex-1 flex-col overflow-hidden">
+<p class="truncate text-sm font-medium text-white" id="userName">Alex Morgan</p>
+<p class="truncate text-xs text-[#9db0b9]">Free Plan</p>
+</div>
+<span id="logoutBtn" class="material-symbols-outlined text-[#9db0b9] cursor-pointer hover:text-white transition-colors" style="font-size: 20px;">logout</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+<div class="container mx-auto max-w-[1200px] px-4 py-8 md:px-8">
+<header class="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+<div class="flex flex-col gap-2">
+<h2 class="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white md:text-4xl">
+                            Welcome back, Alex! 👋
+                        </h2>
+<div class="flex items-center gap-2 text-[#9db0b9]">
+<span class="material-symbols-outlined text-orange-400" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<p class="text-base font-normal">You're on a <span class="font-bold text-white">5-day streak</span>. Keep the momentum going!</p>
+</div>
+</div>
+<button class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:bg-blue-400 hover:shadow-blue-500/40 active:scale-95">
+<span class="material-symbols-outlined" style="font-size: 20px;">play_arrow</span>
+<span>Start Learning</span>
+</button>
+</header>
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
+<div class="relative overflow-hidden rounded-2xl border border-[#283339] bg-surface-dark p-6 transition-transform hover:-translate-y-1">
+<div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5"></div>
+<div class="relative z-10 flex flex-col gap-1">
+<div class="mb-2 flex items-center gap-2 text-[#9db0b9]">
+<span class="material-symbols-outlined text-sm">school</span>
+<span class="text-sm font-medium uppercase tracking-wider">Words Learned</span>
+</div>
+<p class="text-3xl font-bold text-white">1,240</p>
+<p class="text-xs text-[#0bda57]">+12 today</p>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-2xl border border-[#283339] bg-surface-dark p-6 transition-transform hover:-translate-y-1">
+<div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-purple-500/5"></div>
+<div class="relative z-10 flex flex-col gap-1">
+<div class="mb-2 flex items-center gap-2 text-[#9db0b9]">
+<span class="material-symbols-outlined text-sm">headphones</span>
+<span class="text-sm font-medium uppercase tracking-wider">Hours Listened</span>
+</div>
+<p class="text-3xl font-bold text-white">34.5</p>
+<p class="text-xs text-[#9db0b9]">Top 10% of learners</p>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-2xl border border-[#283339] bg-surface-dark p-6 transition-transform hover:-translate-y-1">
+<div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-green-500/5"></div>
+<div class="relative z-10 flex flex-col gap-1">
+<div class="mb-2 flex items-center gap-2 text-[#9db0b9]">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="text-sm font-medium uppercase tracking-wider">Current Level</span>
+</div>
+<p class="text-3xl font-bold text-white">B2 Upper</p>
+<p class="text-xs text-[#9db0b9]">Next assessment: 2 days</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
+<div class="rounded-2xl border border-[#283339] bg-surface-dark p-6 lg:col-span-1">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-white">Vocabulary Mastery</h3>
+<button class="rounded-full p-1 text-[#9db0b9] hover:bg-[#283339] hover:text-white">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col items-center justify-center gap-6">
+<div class="relative flex h-48 w-48 items-center justify-center rounded-full bg-[#283339]" style="background: conic-gradient(#13a4ec 64%, #283339 0);">
+<div class="absolute flex h-40 w-40 flex-col items-center justify-center rounded-full bg-surface-dark">
+<span class="text-3xl font-black text-white">64%</span>
+<span class="text-xs font-medium text-[#9db0b9]">Mastered</span>
+</div>
+</div>
+<div class="w-full space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-3 w-3 rounded-full bg-primary"></div>
+<span class="text-sm font-medium text-white">Mastered</span>
+</div>
+<span class="text-sm font-bold text-white">793</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-3 w-3 rounded-full bg-[#3b4b54]"></div>
+<span class="text-sm font-medium text-[#9db0b9]">Learning</span>
+</div>
+<span class="text-sm font-bold text-[#9db0b9]">447</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-3 w-3 rounded-full bg-[#283339] border border-[#3b4b54]"></div>
+<span class="text-sm font-medium text-[#9db0b9]">New</span>
+</div>
+<span class="text-sm font-bold text-[#9db0b9]">128</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 lg:col-span-2">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold text-white">Recommended for You (B2 Level)</h3>
+<a class="text-sm font-bold text-primary hover:text-blue-400" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+<div class="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#283339] bg-surface-dark transition-all hover:border-[#3b4b54] hover:shadow-xl">
+<div class="relative aspect-video w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Group of friends talking and laughing in a cafe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCrntqm8rJ9Y1E-mIK3iwjYb-Ouuc5u2JcXCDT19a8GHYGH-tODuFklkbM1r_-zDSeGYr4z8K-aLE5fZomsFbIhycxPk7meS4DRR--hIg9XNkCuzFmuJtilO_MwXRMiqsjBkrcZ_EpAwLosnVTsR6B51ZXSyyzcSRbTJTE5p6gpyAaDZ6y1MOdO120Yg-ZoxIzHVfIyFTdqaaaVcjBAE6plFbdrqy6tLe_HPMDvmLR31P0qoSVab7E6404YhzfPc7-lPozmJLn3MG0');"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10"></div>
+<div class="absolute left-3 top-3 flex gap-2">
+<span class="rounded bg-black/60 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm border border-white/10">B2</span>
+</div>
+<div class="absolute bottom-3 right-3 rounded bg-black/80 px-2 py-0.5 text-xs font-medium text-white">12:45</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 h-1 w-full bg-white/20">
+<div class="h-full w-[45%] bg-primary"></div>
+</div>
+</div>
+<div class="flex flex-col p-4">
+<h4 class="mb-1 line-clamp-2 text-base font-bold leading-tight text-white group-hover:text-primary">The Psychology of Learning New Habits</h4>
+<div class="flex items-center justify-between text-xs text-[#9db0b9]">
+<span>Science Daily</span>
+<span>45% watched</span>
+</div>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#283339] bg-surface-dark transition-all hover:border-[#3b4b54] hover:shadow-xl">
+<div class="relative aspect-video w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Several people sitting around a table discussing a project" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2-wNVf3kw9Hq3RYdZMlqaUAa-gkNcqPQQlW9McNxAOvwo638CCe2cE3nKRNfZG0XEYKV3UcxL3J16rLuwGBgx_CSp8vE-KdpVogV2XL9Cq1nOL85dTgawcm8mKV8nsn3AmY_dstzxqi3s9KjlQL_GNAozgPwp-f-JInQBNrd6LqqQzobZWzRI_XFFW1tuNl02D7zuTorBzLkA9w8ky4md4o9xBe8XCA_38ukX-iN29jT27-AiZEBIKaKV6KT-7ACIrP4yllNECPsT');"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10"></div>
+<div class="absolute left-3 top-3 flex gap-2">
+<span class="rounded bg-black/60 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm border border-white/10">B2</span>
+</div>
+<div class="absolute bottom-3 right-3 rounded bg-black/80 px-2 py-0.5 text-xs font-medium text-white">08:20</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col p-4">
+<h4 class="mb-1 line-clamp-2 text-base font-bold leading-tight text-white group-hover:text-primary">Business Meeting Etiquette Explained</h4>
+<div class="flex items-center justify-between text-xs text-[#9db0b9]">
+<span>Career Success</span>
+<span>New</span>
+</div>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#283339] bg-surface-dark transition-all hover:border-[#3b4b54] hover:shadow-xl">
+<div class="relative aspect-video w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A person giving a passionate speech on a stage" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCFJyUHkrAc3jY427a3QUUmlXn1m_RaHYW4iOWheAP3V0QXFcwbBubWzeXKFxSAinDRPNPjLVJlH9L0TGAX5q1kXix0o2iwkmEGmCp1Rz2ApJvraoVDqlk7zXv7E5sPvh3aPcaPO6HS3yXfisrkbpKODQJIhWTJJyC6il2B0rsHKkdv2WcOYencTgm7dXbYqfe7KZqK0vPJ2g0Xa7-ChlejHX3SscguW24QYDwruUZ1fwU8zk6ESDEHp_zUxLQJ3QxuX2sm5NMFh1QV');"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10"></div>
+<div class="absolute left-3 top-3 flex gap-2">
+<span class="rounded bg-black/60 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm border border-white/10">B2+</span>
+<span class="rounded bg-primary/90 px-2 py-0.5 text-xs font-bold text-white shadow-sm">Trending</span>
+</div>
+<div class="absolute bottom-3 right-3 rounded bg-black/80 px-2 py-0.5 text-xs font-medium text-white">15:10</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col p-4">
+<h4 class="mb-1 line-clamp-2 text-base font-bold leading-tight text-white group-hover:text-primary">Why Storytelling Matters</h4>
+<div class="flex items-center justify-between text-xs text-[#9db0b9]">
+<span>TED Talks</span>
+<span>12k views</span>
+</div>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#283339] bg-surface-dark transition-all hover:border-[#3b4b54] hover:shadow-xl">
+<div class="relative aspect-video w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Top down view of a colorful cooking preparation" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBT8ns-iu4BEi9bYSFQKUew3hpc66SJhKIOuj_rPTEHuyEwp5BeXW0bsBukFy2DUFm00sCjHrjN7Xy5o4rSeVKH99hb1UytV28uIUPs2VVhD1DIhDq8tMQWeZ3o7lxNl_Bw4SjyB5PH1S_drmgRlimN7kfQP7N6f3_2NQOjAAsS6ncAcxKikDTHxTrU1N_Vhdq_EpIzphgzoLDoWkqs4c14alUmBvaCatBwudu87Mi6gXT7OQZ-da6Es3yFeC4jSADGJELB-qE8Kcol');"></div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10"></div>
+<div class="absolute left-3 top-3 flex gap-2">
+<span class="rounded bg-black/60 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm border border-white/10">B2</span>
+</div>
+<div class="absolute bottom-3 right-3 rounded bg-black/80 px-2 py-0.5 text-xs font-medium text-white">06:30</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col p-4">
+<h4 class="mb-1 line-clamp-2 text-base font-bold leading-tight text-white group-hover:text-primary">Cooking Terms You Need to Know</h4>
+<div class="flex items-center justify-between text-xs text-[#9db0b9]">
+<span>Culinary Arts</span>
+<span>New</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex items-center justify-center border-t border-[#283339] py-6 text-sm text-[#9db0b9]">
+<p>LinguaFlow © 2024. Keep learning!</p>
+</div>
+</div>
+</main>
+</div>
+<!-- YouTube API Integration -->
+<script src="js/config.js"></script>
+<script src="js/youtubeApi.js"></script>
+<script src="js/common.js"></script>
+
+<!-- Page Specific JS -->
+<script src="js/dashboard.js"></script>
+</body></html>

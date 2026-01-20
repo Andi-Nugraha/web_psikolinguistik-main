@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LinguaFlow - Vocabulary Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                        "surface-dark": "#182830",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .group:hover .group-hover\:rotate-y-180 {
+            transform: rotateY(180deg);
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101c22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #283339; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b4b54; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col overflow-x-hidden">
+<div class="flex flex-1 h-screen overflow-hidden">
+<aside class="hidden md:flex w-64 flex-col bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800">
+<div class="p-6 flex items-center gap-3">
+<div class="text-primary size-8 bg-primary/20 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">translate</span>
+</div>
+<div>
+<h1 class="text-base font-bold leading-none tracking-tight">LinguaFlow</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Language Learning</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">home</span>
+<span class="font-medium text-sm">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">play_circle</span>
+<span class="font-medium text-sm">Video Learning</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined fill-1">style</span>
+<span class="text-sm">Flashcards</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">assignment</span>
+<span class="font-medium text-sm">Exercises</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">bar_chart</span>
+<span class="font-medium text-sm">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-center bg-cover border-2 border-primary/30" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSrPz1UuIHtcXRUvldfk0c_Il3hakuFaCUOxzsEqWhwT_ov0TK7_TUv7bkZIUqI9-Y8V6WKFeBdonv5HsjO20IFr6snTL_BKGsjMaodysla26l0P5xYLfsQ_Z0qAba0YOSl9R5o9kAj-jhkQkyjqcfYQX6vNkmXS0MSRwRLT1f7rcfZ18fsMwpUbKrGPEQNKYCTsVwDiTr5VfLGspXRDOBrE3GegDDsyBtSO_EY6cH9dWXRW9MmsJvtp3WfzcXstqh1HPJ5sspZxsO')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium truncate">Alex Morgan</p>
+<p class="text-xs text-slate-500 truncate">Pro Member</p>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<header class="h-16 flex items-center justify-between px-6 bg-surface-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-10 sticky top-0">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-slate-500 hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="relative w-64 hidden sm:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">search</span>
+<input class="w-full bg-slate-100 dark:bg-surface-dark border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary placeholder:text-slate-500 dark:text-white" placeholder="Search vocabulary..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-slate-100 dark:bg-surface-dark rounded-full border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-orange-500 text-[20px]">local_fire_department</span>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200">12 Day Streak</span>
+</div>
+<button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">My Collection</h2>
+<p class="text-slate-500 dark:text-slate-400 max-w-2xl">
+                            Manage your personal vocabulary deck. Words are automatically added from your watched videos.
+                        </p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-dark border border-slate-700 hover:border-slate-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                            Add Word
+                        </button>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-primary/25 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined fill-1 text-[20px]">school</span>
+                            Start Session
+                        </button>
+</div>
+</div>
+<div class="w-full bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<div class="bg-primary/20 p-1.5 rounded-md">
+<span class="material-symbols-outlined text-primary text-[20px]">target</span>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Daily Mastery Goal</span>
+</div>
+<span class="text-sm font-bold text-slate-900 dark:text-white">15<span class="text-slate-500">/20 words</span></span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[75%] rounded-full relative">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+<p class="text-xs text-slate-500 mt-2 text-right">Keep it up! You're 75% there.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 pb-2">
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:border-primary/50 hover:text-primary transition-all">
+<span>Level: All</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:border-primary/50 hover:text-primary transition-all">
+<span>Category: Nouns</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary rounded-lg text-sm font-medium transition-all">
+<span>Status: Learning</span>
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="ml-auto flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 pl-4">
+<span class="text-xs text-slate-500 font-medium uppercase mr-1">Sort by</span>
+<button class="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+</button>
+<button class="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wide">B2</span>
+<button class="text-slate-300 dark:text-slate-600 hover:text-yellow-400 dark:hover:text-yellow-400 transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Epiphany</h3>
+<p class="text-slate-500 italic">noun</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Epiphany</h3>
+<span class="text-xs text-slate-400 font-mono">/əˈpifənē/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    A moment of sudden revelation or insight.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"I had an <span class="text-white font-semibold">epiphany</span> while watching that video."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-wide">C1</span>
+<button class="text-yellow-400 transition-colors">
+<span class="material-symbols-outlined fill-1">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Serendipity</h3>
+<p class="text-slate-500 italic">noun</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Serendipity</h3>
+<span class="text-xs text-slate-400 font-mono">/ˌserənˈdipədē/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    The occurrence and development of events by chance in a happy or beneficial way.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"Meeting her there was pure <span class="text-white font-semibold">serendipity</span>."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs font-bold uppercase tracking-wide">C2</span>
+<button class="text-slate-300 dark:text-slate-600 hover:text-yellow-400 dark:hover:text-yellow-400 transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Obfuscate</h3>
+<p class="text-slate-500 italic">verb</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Obfuscate</h3>
+<span class="text-xs text-slate-400 font-mono">/ˈäbfəˌskāt/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    Render obscure, unclear, or unintelligible.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"The spelling changes will <span class="text-white font-semibold">obfuscate</span> the meaning."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-bold uppercase tracking-wide">A2</span>
+<button class="text-slate-300 dark:text-slate-600 hover:text-yellow-400 dark:hover:text-yellow-400 transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Mundane</h3>
+<p class="text-slate-500 italic">adjective</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Mundane</h3>
+<span class="text-xs text-slate-400 font-mono">/mənˈdān/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    Lacking interest or excitement; dull.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"Seeking a way out of his <span class="text-white font-semibold">mundane</span> existence."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wide">B1</span>
+<button class="text-slate-300 dark:text-slate-600 hover:text-yellow-400 dark:hover:text-yellow-400 transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Resilient</h3>
+<p class="text-slate-500 italic">adjective</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Resilient</h3>
+<span class="text-xs text-slate-400 font-mono">/rəˈzilyənt/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    (of a person or animal) able to withstand or recover quickly from difficult conditions.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"Babies are generally far more <span class="text-white font-semibold">resilient</span> than new parents realize."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative h-64 w-full perspective-1000 cursor-pointer">
+<div class="relative h-full w-full shadow-md rounded-xl transition-all duration-500 transform-style-3d group-hover:rotate-y-180">
+<div class="absolute inset-0 h-full w-full rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between backface-hidden group-hover:border-primary transition-colors">
+<div class="flex justify-between items-start">
+<span class="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-wide">C1</span>
+<button class="text-yellow-400 transition-colors">
+<span class="material-symbols-outlined fill-1">star</span>
+</button>
+</div>
+<div class="text-center">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Eloquent</h3>
+<p class="text-slate-500 italic">adjective</p>
+</div>
+<div class="flex justify-center">
+<span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Click to flip</span>
+</div>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-xl bg-slate-900 dark:bg-[#152028] border border-primary p-6 flex flex-col rotate-y-180 backface-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-bold text-white">Eloquent</h3>
+<span class="text-xs text-slate-400 font-mono">/ˈeləkwənt/</span>
+</div>
+<button class="bg-primary/20 p-1.5 rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                                    Fluent or persuasive in speaking or writing.
+                                </p>
+<div class="mt-auto pt-4 border-t border-slate-700">
+<p class="text-primary text-xs font-bold mb-1 uppercase">Context</p>
+<p class="text-slate-400 text-xs italic">"An <span class="text-white font-semibold">eloquent</span> speech."</p>
+</div>
+</div>
+</div>
+</div>
+<div class="h-64 w-full flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl hover:border-primary hover:bg-primary/5 cursor-pointer transition-all group">
+<div class="bg-slate-200 dark:bg-slate-800 p-4 rounded-full group-hover:bg-primary group-hover:text-white transition-colors text-slate-400">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</div>
+<p class="mt-4 text-slate-500 font-medium group-hover:text-primary">Add New Word</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- YouTube API Integration -->
+<script src="js/config.js"></script>
+<script src="js/youtubeApi.js"></script>
+<script src="js/common.js"></script>
+
+<!-- Page Specific JS -->
+<script src="js/flashcards.js"></script>
+</body></html>
