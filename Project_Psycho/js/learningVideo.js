@@ -10,6 +10,20 @@ let currentProgress = 0;
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🎬 LinguaFlow Video Learning Initializing...');
     
+    // Check if user is logged in
+    if (localStorage.getItem('linguaflow_logged_in') !== 'true') {
+        window.location.href = 'login_code.html';
+        return;
+    }
+    
+    // Dark mode
+    const savedTheme = localStorage.getItem('linguaflow_theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+    }
+    
     // Test API connection
     const apiTest = await youtubeAPI.testConnection();
     apiTest.forEach(result => {
@@ -33,14 +47,25 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // 🎯 Setup navigation
 function setupNavigation() {
-    const navLinks = document.querySelectorAll('nav a');
+    const navLinks = document.querySelectorAll('[id^="nav"]');
+    const currentPage = window.location.pathname.split('/').pop();
+    
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const page = this.querySelector('span.text-sm')?.textContent || this.textContent;
-            navigateToPage(page.trim().toLowerCase().replace(/\s+/g, ''));
-        });
+        const href = link.getAttribute('href');
+        if (href === currentPage) {
+            link.classList.add('bg-[#283339]');
+        }
     });
+
+    // Setup logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('linguaflow_user');
+            localStorage.removeItem('linguaflow_logged_in');
+            window.location.href = 'login_code.html';
+        });
+    }
 }
 
 // 🎯 Initialize video player container
