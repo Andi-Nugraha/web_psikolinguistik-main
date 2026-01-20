@@ -1,6 +1,6 @@
 // learningVideo.js - YouTube Video Learning dengan API Key Anda
 
-let youtubeAPI = window.YouTubeAPI;
+let youtubeAPI = null;
 let currentVideoId = null;
 let playerInstance = null;
 let isPlaying = false;
@@ -24,17 +24,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.documentElement.classList.remove('dark');
     }
     
-    // Test API connection
-    const apiTest = await youtubeAPI.testConnection();
-    apiTest.forEach(result => {
-        console.log(`${result.status} ${result.service}: ${result.details}`);
-    });
+    // Wait for YouTube API to be available
+    let retries = 0;
+    while (!window.YouTubeAPI && retries < 10) {
+        console.log('⏳ Menunggu YouTube API...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        retries++;
+    }
+    
+    if (window.YouTubeAPI) {
+        youtubeAPI = window.YouTubeAPI;
+        console.log('✅ YouTube API berhasil dimuat');
+    } else {
+        console.warn('⚠️ YouTube API tidak tersedia, menggunakan fallback');
+        youtubeAPI = createFallbackAPI();
+    }
     
     // Navigation
     setupNavigation();
     
-    // Initialize video player
-    await initializeVideoPlayer();
+    // Initialize video player container
+    initializeVideoPlayerContainer();
     
     // Setup event listeners
     setupEventListeners();
@@ -69,13 +79,13 @@ function setupNavigation() {
 }
 
 // 🎯 Initialize video player container
-async function initializeVideoPlayer() {
+function initializeVideoPlayerContainer() {
     const videoContainer = document.querySelector('.aspect-video');
     if (!videoContainer) return;
     
     // Replace with enhanced player container
     videoContainer.innerHTML = `
-        <div id="youtube-player-container" class="w-full h-full relative rounded-xl overflow-hidden">
+        <div id="youtube-player-container" class="w-full h-full relative rounded-xl overflow-hidden bg-black flex items-center justify-center">
             <!-- YouTube Player -->
             <div id="youtube-player" class="w-full h-full"></div>
             
@@ -88,77 +98,13 @@ async function initializeVideoPlayer() {
             </div>
             
             <!-- Play Button Overlay -->
-            <div id="play-overlay" class="absolute inset-0 flex items-center justify-center z-10 cursor-pointer opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <div id="play-overlay" class="absolute inset-0 flex items-center justify-center z-10 cursor-pointer">
                 <div class="flex items-center justify-center rounded-full size-20 bg-primary/90 text-white shadow-[0_0_30px_rgba(19,164,236,0.5)] hover:scale-110 transition-transform duration-200">
                     <span class="material-symbols-outlined text-[40px]">play_arrow</span>
                 </div>
             </div>
-            
-            <!-- Custom Controls -->
-            <div id="custom-controls" class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <!-- Progress Bar -->
-                <div class="w-full bg-white/20 rounded-full h-1.5 mb-3 cursor-pointer" id="progress-bar">
-                    <div class="bg-primary h-full rounded-full relative" id="progress-fill" style="width: 0%">
-                        <div class="absolute right-0 top-1/2 -translate-y-1/2 size-3 bg-white rounded-full shadow"></div>
-                    </div>
-                </div>
-                
-                <!-- Control Buttons -->
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <button id="play-pause-btn" class="text-white hover:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-2xl">play_arrow</span>
-                        </button>
-                        <button id="volume-btn" class="text-white hover:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-xl">volume_up</span>
-                        </button>
-                        <div class="text-white text-sm font-medium" id="time-display">
-                            <span id="current-time">0:00</span> / <span id="total-time">0:00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <button id="settings-btn" class="text-white hover:text-primary transition-colors" title="Settings">
-                            <span class="material-symbols-outlined text-xl">settings</span>
-                        </button>
-                        <button id="fullscreen-btn" class="text-white hover:text-primary transition-colors" title="Fullscreen">
-                            <span class="material-symbols-outlined text-xl">fullscreen</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Video Info Overlay -->
-            <div id="video-info-overlay" class="absolute top-4 left-4 right-4 z-10">
-                <div class="flex justify-between items-start">
-                    <div class="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 max-w-[70%]">
-                        <h3 id="video-title" class="text-white font-bold text-sm truncate">Loading video...</h3>
-                        <div class="flex items-center gap-2 text-white/80 text-xs mt-1">
-                            <span id="video-channel">LinguaFlow</span>
-                            <span>•</span>
-                            <span id="video-views">0 views</span>
-                            <span>•</span>
-                            <span id="video-date">Today</span>
-                        </div>
-                    </div>
-                    <div class="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2">
-                        <span class="text-white font-bold text-sm" id="video-level">B2</span>
-                    </div>
-                </div>
-            </div>
         </div>
     `;
-    
-    // Setup overlay play button
-    const playOverlay = document.getElementById('play-overlay');
-    if (playOverlay) {
-        playOverlay.addEventListener('click', function() {
-            if (playerInstance) {
-                youtubeAPI.player.playVideo();
-                this.style.opacity = '0';
-            }
-        });
-    }
 }
 
 // 🎯 Setup event listeners
@@ -167,8 +113,17 @@ function setupEventListeners() {
     const loadBtn = document.querySelector('button:contains("Load")');
     const urlInput = document.querySelector('input[placeholder*="YouTube URL"]');
     
-    if (loadBtn && urlInput) {
-        loadBtn.addEventListener('click', async function() {
+    // Fallback: cari by text content
+    const buttons = document.querySelectorAll('button');
+    let realLoadBtn = null;
+    buttons.forEach(btn => {
+        if (btn.textContent.trim() === 'Load') {
+            realLoadBtn = btn;
+        }
+    });
+    
+    if (realLoadBtn && urlInput) {
+        realLoadBtn.addEventListener('click', async function() {
             await loadVideoFromInput();
         });
         
@@ -186,12 +141,6 @@ function setupEventListeners() {
         saveBtn.addEventListener('click', function() {
             saveCurrentWordToFlashcards();
         });
-    }
-    
-    // Settings button
-    const settingsBtn = document.querySelector('button:contains("Settings")');
-    if (settingsBtn) {
-        settingsBtn.addEventListener('click', showVideoSettings);
     }
     
     // Psycholinguistic Mode toggle
@@ -335,7 +284,10 @@ async function loadInitialVideo() {
 // 🎯 Load video from input
 async function loadVideoFromInput() {
     const urlInput = document.querySelector('input[placeholder*="YouTube URL"]');
-    if (!urlInput) return;
+    if (!urlInput) {
+        showNotification('Input field not found', 'error');
+        return;
+    }
     
     const url = urlInput.value.trim();
     if (!url) {
@@ -343,13 +295,36 @@ async function loadVideoFromInput() {
         return;
     }
     
-    const videoId = YouTubeConfig.extractVideoId(url);
+    // Extract video ID from URL
+    const videoId = extractYouTubeVideoId(url);
     if (!videoId) {
         showNotification('Invalid YouTube URL. Please check the format.', 'error');
         return;
     }
     
+    console.log('🎬 Loading video:', videoId);
     await loadYouTubeVideo(videoId);
+}
+
+// 🎯 Extract YouTube Video ID from URL
+function extractYouTubeVideoId(url) {
+    // Handle different YouTube URL formats
+    const patterns = [
+        /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,           // youtube.com/watch?v=...
+        /youtu\.be\/([a-zA-Z0-9_-]+)/,                         // youtu.be/...
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,              // youtube.com/embed/...
+        /youtube\.com\/v\/([a-zA-Z0-9_-]+)/,                  // youtube.com/v/...
+        /^([a-zA-Z0-9_-]{11})$/                                // Direct video ID
+    ];
+    
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+    
+    return null;
 }
 
 // 🎯 Load YouTube video
@@ -357,41 +332,82 @@ async function loadYouTubeVideo(videoId) {
     showLoading();
     
     try {
-        // Load video details
-        const videoDetails = await youtubeAPI.dataApi.getVideoDetails(videoId);
+        console.log('🎥 Loading video with ID:', videoId);
         
-        // Update video info
-        updateVideoInfo(videoDetails);
-        
-        // Load or update player
-        if (!playerInstance || currentVideoId !== videoId) {
-            await initializeYouTubePlayer(videoId);
-            currentVideoId = videoId;
+        // Check if youtubeAPI is available
+        if (!youtubeAPI) {
+            throw new Error('YouTube API not initialized');
         }
         
-        // Load transcript
-        transcriptData = generateTranscript(videoId);
-        renderTranscript(transcriptData);
+        let videoDetails = null;
+        
+        // Try to get video details
+        try {
+            if (youtubeAPI.dataApi && youtubeAPI.dataApi.getVideoDetails) {
+                videoDetails = await youtubeAPI.dataApi.getVideoDetails(videoId);
+            }
+        } catch (detailsError) {
+            console.warn('Could not fetch video details:', detailsError);
+            videoDetails = {
+                videoId: videoId,
+                title: 'Video - ' + videoId,
+                channelTitle: 'Unknown Channel'
+            };
+        }
+        
+        // Update video info
+        if (videoDetails) {
+            updateVideoInfo(videoDetails);
+        }
+        
+        // Initialize player
+        console.log('📺 Initializing player...');
+        const playerContainer = document.getElementById('youtube-player') || 
+                               document.getElementById('playerContainer') ||
+                               document.querySelector('[data-video-player]');
+        
+        if (!playerContainer) {
+            throw new Error('Player container not found in DOM');
+        }
+        
+        // Load or update player
+        if (youtubeAPI.initPlayer) {
+            playerInstance = await youtubeAPI.initPlayer('youtube-player', videoId);
+        } else if (youtubeAPI.createPlayer) {
+            playerInstance = youtubeAPI.createPlayer('youtube-player', videoId);
+        } else {
+            console.warn('No player initialization method available');
+            // Fallback: use iframe
+            playerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        }
+        
+        currentVideoId = videoId;
+        
+        // Try to load transcript
+        try {
+            transcriptData = generateTranscript(videoId);
+            renderTranscript(transcriptData);
+        } catch (transcriptError) {
+            console.warn('Could not load transcript:', transcriptError);
+        }
         
         // Update URL parameter
-        updateUrlParameter(videoId);
+        try {
+            updateUrlParameter(videoId);
+        } catch (urlError) {
+            console.warn('Could not update URL:', urlError);
+        }
         
         // Hide loading
         hideLoading();
         
         // Show success message
-        showNotification(`Loaded: "${videoDetails.title}"`, 'success');
-        
-        // Update progress if exists
-        const savedProgress = youtubeAPI.getWatchProgress(videoId);
-        if (savedProgress && savedProgress.currentTime) {
-            showNotification(`Resuming from ${formatTime(savedProgress.currentTime)}`, 'info');
-        }
+        showNotification(`Loaded: "${videoDetails?.title || videoId}"`, 'success');
         
     } catch (error) {
-        console.error('Error loading video:', error);
+        console.error('❌ Error loading video:', error);
         hideLoading();
-        showNotification('Failed to load video. Please try again.', 'error');
+        showNotification('Failed to load video. ' + error.message, 'error');
     }
 }
 
@@ -399,42 +415,45 @@ async function loadYouTubeVideo(videoId) {
 async function initializeYouTubePlayer(videoId) {
     const playerContainer = document.getElementById('youtube-player');
     if (!playerContainer) {
-        console.error('Player container not found');
+        console.error('❌ Player container not found');
         return;
     }
     
     try {
         // Clear previous player
-        if (playerInstance) {
-            youtubeAPI.player.destroy();
-            playerInstance = null;
+        playerContainer.innerHTML = '';
+        
+        // Initialize new player with youtubeAPI
+        if (youtubeAPI && youtubeAPI.initPlayer) {
+            playerInstance = await youtubeAPI.initPlayer('youtube-player', videoId, {
+                autoplay: 0,
+                controls: 0,
+                rel: 0,
+                modestbranding: 1,
+                showinfo: 0
+            });
+        } else if (youtubeAPI && youtubeAPI.createPlayer) {
+            playerInstance = youtubeAPI.createPlayer('youtube-player', videoId);
+        } else {
+            // Fallback to simple iframe
+            console.warn('⚠️ Using iframe fallback for player');
+            const iframe = document.createElement('iframe');
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.style.border = 'none';
+            playerContainer.appendChild(iframe);
+            playerInstance = { videoId };
         }
         
-        // Initialize new player
-        playerInstance = await youtubeAPI.initPlayer('youtube-player', videoId, {
-            autoplay: 0,
-            controls: 0, // Hide YouTube controls, use custom ones
-            rel: 0,
-            modestbranding: 1,
-            showinfo: 0
-        });
-        
-        // Setup player events
-        setupPlayerEvents();
-        
-        // Setup custom controls
-        setupCustomControls();
-        
-        // Load saved progress
-        const savedProgress = youtubeAPI.getWatchProgress(videoId);
-        if (savedProgress && savedProgress.currentTime) {
-            await youtubeAPI.player.seekTo(savedProgress.currentTime, true);
-        }
+        console.log('✅ Player initialized for video:', videoId);
         
     } catch (error) {
-        console.error('Error creating player:', error);
-        showNotification('Failed to create video player', 'error');
-        throw error;
+        console.error('❌ Error initializing player:', error);
+        // Last resort: iframe
+        playerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
     }
 }
 
@@ -1020,6 +1039,56 @@ function updateUrlParameter(videoId) {
     const url = new URL(window.location);
     url.searchParams.set('video', videoId);
     window.history.pushState({ videoId }, '', url);
+}
+
+// 🎯 Create fallback API when YouTube API unavailable
+function createFallbackAPI() {
+    console.warn('⚠️ Using fallback API - YouTube API not available');
+    
+    return {
+        player: null,
+        playerReady: false,
+        
+        dataApi: {
+            getVideoDetails: async function(videoId) {
+                return {
+                    videoId: videoId,
+                    title: 'Video - ' + videoId,
+                    channelTitle: 'Unknown Channel',
+                    viewCount: 0,
+                    likeCount: 0,
+                    duration: 0,
+                    description: 'No description available'
+                };
+            }
+        },
+        
+        initPlayer: function(containerId, videoId) {
+            console.log('🎬 Creating fallback player for video:', videoId);
+            
+            const container = document.getElementById(containerId);
+            if (!container) return null;
+            
+            // Create a simple fallback player using iframe
+            const iframe = document.createElement('iframe');
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.style.border = 'none';
+            
+            container.innerHTML = '';
+            container.appendChild(iframe);
+            
+            this.playerReady = true;
+            return { videoData: { videoId } };
+        },
+        
+        getWatchProgress: function(videoId) {
+            return null;
+        }
+    };
 }
 
 // 🎯 Helper: Format time
