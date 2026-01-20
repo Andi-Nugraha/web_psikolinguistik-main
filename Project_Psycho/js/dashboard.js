@@ -68,17 +68,39 @@ function setupDashboard() {
     // Setup user profile and logout button
     setupUserProfile();
     
+    // Setup navigation
+    setupNavigation();
+    
     // Update "Start Learning" button
-    const startLearningBtn = document.querySelector('button:contains("Start Learning")');
-    if (startLearningBtn) {
-        startLearningBtn.addEventListener('click', function() {
-            const defaultVideoId = YouTubeConfig.getVideoId('english_conversation') || 'zQe9J-7CbC4';
-            window.location.href = `learningVideo_code.html?video=${defaultVideoId}`;
-        });
-    }
+    setupStartLearningButton();
     
     // Update video recommendations
     updateVideoRecommendations();
+}
+
+function setupNavigation() {
+    // Setup sidebar navigation with active state
+    const navLinks = document.querySelectorAll('[id^="nav"]');
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage) {
+            link.classList.add('bg-[#283339]', 'text-primary');
+        }
+    });
+}
+
+function setupStartLearningButton() {
+    const startLearningBtn = document.getElementById('startLearningBtn');
+    if (startLearningBtn) {
+        startLearningBtn.addEventListener('click', function() {
+            const defaultVideoId = (typeof YouTubeConfig !== 'undefined') 
+                ? YouTubeConfig.getVideoId('english_conversation') 
+                : 'zQe9J-7CbC4';
+            window.location.href = `learningVideo_code.html?video=${defaultVideoId}`;
+        });
+    }
 }
 
 function setupUserProfile() {
