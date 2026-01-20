@@ -7,6 +7,17 @@ let isPlaying = false;
 let transcriptData = [];
 let currentProgress = 0;
 
+// Tunggu YouTube IFrame API siap
+function waitForYouTubeAPI() {
+    return new Promise((resolve) => {
+        if (window.YT && window.YT.Player) {
+            resolve();
+        } else {
+            window.onYouTubeIframeAPIReady = resolve;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🎬 LinguaFlow Video Learning Initializing...');
     
@@ -24,19 +35,38 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.documentElement.classList.remove('dark');
     }
     
-    // Wait for YouTube API to be available
+    // Tunggu YouTube IFrame API siap
+    try {
+        console.log('⏳ Menunggu YouTube IFrame API...');
+        await waitForYouTubeAPI();
+        console.log('✅ YouTube IFrame API siap');
+    } catch (error) {
+        console.warn('⚠️ YouTube IFrame API timeout:', error);
+    }
+    
+    // Tunggu YouTubeAPI wrapper (dari youtubeApi.js)
     let retries = 0;
     while (!window.YouTubeAPI && retries < 10) {
-        console.log('⏳ Menunggu YouTube API...');
+        console.log('⏳ Menunggu YouTubeAPI wrapper...');
         await new Promise(resolve => setTimeout(resolve, 500));
         retries++;
     }
     
     if (window.YouTubeAPI) {
         youtubeAPI = window.YouTubeAPI;
-        console.log('✅ YouTube API berhasil dimuat');
+        console.log('✅ YouTubeAPI wrapper berhasil dimuat');
+        
+        // Test koneksi ke YouTube API
+        try {
+            const testResults = await youtubeAPI.testConnection();
+            testResults.forEach(result => {
+                console.log(`${result.status} ${result.service}: ${result.details}`);
+            });
+        } catch (error) {
+            console.warn('⚠️ Error testing connection:', error);
+        }
     } else {
-        console.warn('⚠️ YouTube API tidak tersedia, menggunakan fallback');
+        console.warn('⚠️ YouTubeAPI wrapper tidak tersedia, menggunakan fallback');
         youtubeAPI = createFallbackAPI();
     }
     
@@ -341,10 +371,11 @@ async function loadYouTubeVideo(videoId) {
         
         let videoDetails = null;
         
-        // Try to get video details
+        // Try to get video details from Data API
         try {
             if (youtubeAPI.dataApi && youtubeAPI.dataApi.getVideoDetails) {
                 videoDetails = await youtubeAPI.dataApi.getVideoDetails(videoId);
+                console.log('✅ Video details loaded:', videoDetails.title);
             }
         } catch (detailsError) {
             console.warn('Could not fetch video details:', detailsError);
@@ -360,28 +391,27 @@ async function loadYouTubeVideo(videoId) {
             updateVideoInfo(videoDetails);
         }
         
-        // Initialize player
-        console.log('📺 Initializing player...');
-        const playerContainer = document.getElementById('youtube-player') || 
-                               document.getElementById('playerContainer') ||
-                               document.querySelector('[data-video-player]');
+        // Initialize player using YouTubeAPI.initPlayer()
+        console.log('📺 Initializing YouTube player...');
+        const playerContainer = document.getElementById('youtube-player');
         
         if (!playerContainer) {
             throw new Error('Player container not found in DOM');
         }
         
-        // Load or update player
-        if (youtubeAPI.initPlayer) {
+        // Use youtubeAPI.initPlayer() to create the actual YouTube player
+        try {
             playerInstance = await youtubeAPI.initPlayer('youtube-player', videoId);
-        } else if (youtubeAPI.createPlayer) {
-            playerInstance = youtubeAPI.createPlayer('youtube-player', videoId);
-        } else {
-            console.warn('No player initialization method available');
-            // Fallback: use iframe
-            playerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            console.log('✅ YouTube Player initialized successfully');
+            currentVideoId = videoId;
+        } catch (playerError) {
+            console.error('❌ Error initializing player:', playerError);
+            // Fallback to simple iframe
+            console.warn('⚠️ Using iframe fallback for player');
+            playerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            playerInstance = { videoId };
+            currentVideoId = videoId;
         }
-        
-        currentVideoId = videoId;
         
         // Try to load transcript
         try {
@@ -411,50 +441,11 @@ async function loadYouTubeVideo(videoId) {
     }
 }
 
-// 🎯 Initialize YouTube player
+// 🎯 Initialize YouTube player (simplified - now handled in loadYouTubeVideo)
 async function initializeYouTubePlayer(videoId) {
-    const playerContainer = document.getElementById('youtube-player');
-    if (!playerContainer) {
-        console.error('❌ Player container not found');
-        return;
-    }
-    
-    try {
-        // Clear previous player
-        playerContainer.innerHTML = '';
-        
-        // Initialize new player with youtubeAPI
-        if (youtubeAPI && youtubeAPI.initPlayer) {
-            playerInstance = await youtubeAPI.initPlayer('youtube-player', videoId, {
-                autoplay: 0,
-                controls: 0,
-                rel: 0,
-                modestbranding: 1,
-                showinfo: 0
-            });
-        } else if (youtubeAPI && youtubeAPI.createPlayer) {
-            playerInstance = youtubeAPI.createPlayer('youtube-player', videoId);
-        } else {
-            // Fallback to simple iframe
-            console.warn('⚠️ Using iframe fallback for player');
-            const iframe = document.createElement('iframe');
-            iframe.width = '100%';
-            iframe.height = '100%';
-            iframe.src = `https://www.youtube.com/embed/${videoId}`;
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
-            iframe.style.border = 'none';
-            playerContainer.appendChild(iframe);
-            playerInstance = { videoId };
-        }
-        
-        console.log('✅ Player initialized for video:', videoId);
-        
-    } catch (error) {
-        console.error('❌ Error initializing player:', error);
-        // Last resort: iframe
-        playerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-    }
+    // This function is kept for backward compatibility
+    // The actual player initialization is now handled in loadYouTubeVideo()
+    console.log('Player initialization handled by loadYouTubeVideo()');
 }
 
 // 🎯 Setup player events
